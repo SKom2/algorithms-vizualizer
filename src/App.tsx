@@ -1,9 +1,9 @@
+import Algorithms from "@/components/Algorithms.tsx";
+
 function App() {
 
   return (
-    <>
-        Hello, World!
-    </>
+    <Algorithms />
   )
 }
 
