@@ -7,7 +7,7 @@ export enum Delays {
 }
 
 export enum BarAnimationTimes {
-  LONG = 900
+  LONG = 300
 }
 
 export enum States {

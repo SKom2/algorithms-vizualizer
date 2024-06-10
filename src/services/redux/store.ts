@@ -1,8 +1,10 @@
 import { combineReducers, configureStore } from '@reduxjs/toolkit';
 import {algorithmsReducer} from "./slices/algorithms/algorithms.slice.ts";
+import {timerReducer} from "@/services/redux/slices/timer/timer.slice.ts";
 
 const rootReducer = combineReducers({
-  algorithmsReducer,
+    algorithmsReducer,
+    timerReducer
 })
 
 export const store = configureStore({

@@ -4,6 +4,7 @@ export interface BarsInitialState {
   algorithm: string;
   delay: number;
   barAnimationTime: number;
+  iterations: number;
   sorting: boolean;
   paused: boolean;
   sorted: boolean;

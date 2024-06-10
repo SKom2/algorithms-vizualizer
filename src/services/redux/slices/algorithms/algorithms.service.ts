@@ -1,7 +1,7 @@
 import { BARS_LENGTH, States } from '@/services/redux/slices/algorithms/algorithms.constants';
 import { awaitTimeout, getRandomNumber, swap } from '@/services/redux/slices/algorithms/algorithms.helpers';
 import { IBar } from '@/services/redux/slices/algorithms/algorithms.types';
-import {changeBar, setCurrentPosition} from '@/services/redux/slices/algorithms/algorithms.slice';
+import {changeBar, countIterations, setCurrentPosition} from '@/services/redux/slices/algorithms/algorithms.slice';
 
 export const algorithmsService = {
   generateArray: () => {
@@ -43,6 +43,7 @@ export const algorithmsService = {
 
         if (sortedBars[j].value > sortedBars[j + 1].value) {
           sortedBars = swap(sortedBars, j, j + 1);
+          dispatch(countIterations())
 
           dispatch(changeBar({ index: j, payload: { value: sortedBars[j].value, state: States.CHANGED } }));
           dispatch(changeBar({ index: j + 1, payload: { value: sortedBars[j + 1].value, state: States.CHANGED } }));
