@@ -48,7 +48,7 @@ const Algorithms = () => {
                 <Button disabled={isSorting || isPaused || isSorted} text="Bubble" onClick={handleBubbleSort}/>
                 <Button disabled={isSorting || isPaused} text="Random" onClick={handleShuffle}/>
                 <Button disabled={!isSorting && !isPaused} text={isPaused ? "Resume" : "Pause"} onClick={handleToggleSorting}/>
-                <Button disabled={!isSorting && !isPaused} text="Reset" onClick={handleReset}/>
+                <Button disabled={!isPaused} text="Reset" onClick={handleReset}/>
             </nav>
             <BarsList/>
         </section>
