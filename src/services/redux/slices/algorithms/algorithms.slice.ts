@@ -77,6 +77,7 @@ const algorithmsSlice = createSlice({
     builder.addCase(bubbleSortAsync.fulfilled, (state) => {
       if (!state.paused) {
         state.sorting = false;
+        state.sorted = true;
       }
     });
     builder.addCase(bubbleSortAsync.pending, (state) => {
