@@ -12,6 +12,7 @@ export default defineConfig({
       '@/assets': '/src/assets',
       '@/services': '/src/services',
       '@/data': '/src/data',
+      '@/hooks': '/src/hooks',
       '@/styles': '/src/assets/styles',
     },
   },

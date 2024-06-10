@@ -3,9 +3,11 @@ import {IBar} from "@/services/redux/slices/algorithms/algorithms.types.ts";
 import {States} from "@/services/redux/slices/algorithms/algorithms.constants.ts";
 import colors from "@/data/colors.ts";
 import {useAppSelector} from "@/services/redux/typeHooks.ts";
+import useAnimatedNumber from "@/hooks/useAnimatedNumber.ts";
 
 const Bar: FC<{ bar: IBar }> = ({ bar }) => {
     const barAnimationTime = useAppSelector(state => state.algorithmsReducer.barAnimationTime);
+    const animatedValue = useAnimatedNumber(bar.value, barAnimationTime * 1000);
 
     let barColor;
 
@@ -23,9 +25,13 @@ const Bar: FC<{ bar: IBar }> = ({ bar }) => {
     }
 
     return (
-         <div style={{height: `${bar.value}%`, transition: `height ${barAnimationTime}s ease`}}>
-             <div className="h-full rounded-t-xl" style={{ backgroundColor: barColor } } />
-         </div>
+        <div className="h-full flex flex-col justify-end">
+            <span className="text-white self-center">{Math.round(animatedValue)}</span>
+            <div className="text-center text-white h-full rounded-t-xl"
+                 style={{height: `${bar.value}%`, transition: `height ${barAnimationTime}s ease`, backgroundColor: barColor}}>
+                <div />
+            </div>
+        </div>
     );
 };
 
