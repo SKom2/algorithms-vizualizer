@@ -47,8 +47,8 @@ const Algorithms = () => {
             <nav className="flex gap-2 items-center justify-center">
                 <Button disabled={isSorting || isPaused || isSorted} text="Bubble" onClick={handleBubbleSort}/>
                 <Button disabled={isSorting || isPaused} text="Random" onClick={handleShuffle}/>
-                <Button disabled={!isSorting && !isPaused} text={isPaused ? "Resume" : "Pause"} onClick={handleToggleSorting}/>
-                <Button disabled={!isPaused} text="Reset" onClick={handleReset}/>
+                <Button disabled={!isSorting && !isPaused} text={isPaused ? "Resume" : "Pause"} onClick={handleToggleSorting} color={isPaused ? colors.resumeButtonColor : colors.pauseButtonColor}/>
+                <Button disabled={!isPaused} text="Reset" onClick={handleReset} color={colors.resetButtonColor}/>
             </nav>
             <BarsList/>
         </section>

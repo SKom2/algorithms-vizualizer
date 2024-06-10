@@ -1,7 +1,10 @@
 const colors = {
     bgColor: '#242424',
 
-    buttonColor: '#3F51B5',
+    buttonColor: '#8E44AD',
+    pauseButtonColor: '#FFA500',
+    resumeButtonColor: '#2E8B57',
+    resetButtonColor: '#FF6347',
     disabledButton: '#A9A9A9',
 
     textColor: '#FFFFFF',
