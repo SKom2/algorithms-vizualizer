@@ -5,14 +5,17 @@ import {
   AlgorithmsSlice,
   BarAnimationTimes,
   BARS_LENGTH,
-  Delays
+  Delays, States
 } from '@/services/redux/slices/algorithms/algorithms.constants';
 
-export const bubbleSortAsync = createAsyncThunk<IBar[], { bars: IBar[], delay: number, dispatch: any }>(
-  'algorithms/bubbleSort',
-  async ({ bars, delay, dispatch }) => {
-    return await algorithmsService.bubbleSort(bars, delay, dispatch);
-  }
+export const bubbleSortAsync = createAsyncThunk<IBar[], void, { state: any, dispatch: any }>(
+    'algorithms/bubbleSort',
+    async (_, { dispatch, getState }) => {
+      const bars = getState().algorithmsReducer.bars;
+      const delay = getState().algorithmsReducer.delay;
+      const sortedBars = await algorithmsService.bubbleSort(bars, delay, dispatch, getState);
+      return sortedBars || bars;
+    }
 );
 
 const initialState: BarsInitialState = {
@@ -22,7 +25,10 @@ const initialState: BarsInitialState = {
   delay: Delays.LONG,
   barAnimationTime: BarAnimationTimes.LONG,
   sorting: false,
+  paused: false,
   sorted: false,
+  currentI: 0,
+  currentJ: 0,
 }
 
 const algorithmsSlice = createSlice({
@@ -37,17 +43,41 @@ const algorithmsSlice = createSlice({
 
     generateArrayAction: (state) => {
       state.bars = algorithmsService.generateArray();
+      state.sorted = false;
     },
 
-    shuffleArrayAction: (state, action: PayloadAction<IBar[]>) => {
-      state.bars = algorithmsService.shuffleArray(action.payload);
+    pauseSortingAction: (state) => {
+      state.paused = true;
+      state.sorting = false;
     },
+
+    resumeSortingAction: (state) => {
+      state.paused = false;
+      state.sorting = true;
+    },
+
+    setCurrentPosition(state, action: PayloadAction<{ i: number, j: number }>) {
+      state.currentI = action.payload.i;
+      state.currentJ = action.payload.j;
+    },
+
+    resetAction: (state) => {
+      state.bars = state.bars.map((bar) => ({
+        ...bar,
+        state: States.IDLE
+      }));
+      state.sorted = false;
+      state.paused = false;
+      state.sorting = false;
+      state.currentI = 0;
+      state.currentJ = 0;
+    }
   },
   extraReducers: (builder) => {
-    builder.addCase(bubbleSortAsync.fulfilled, (state, action) => {
-      state.bars = action.payload;
-      state.sorted = true;
-      state.sorting = false;
+    builder.addCase(bubbleSortAsync.fulfilled, (state) => {
+      if (!state.paused) {
+        state.sorting = false;
+      }
     });
     builder.addCase(bubbleSortAsync.pending, (state) => {
       state.sorting = true;
@@ -59,8 +89,11 @@ const algorithmsSlice = createSlice({
 })
 
 export const {
-  shuffleArrayAction,
   generateArrayAction,
-  changeBar
+  changeBar,
+  pauseSortingAction,
+  resumeSortingAction,
+  setCurrentPosition,
+  resetAction
 } = algorithmsSlice.actions;
 export const algorithmsReducer = algorithmsSlice.reducer;

@@ -5,7 +5,10 @@ export interface BarsInitialState {
   delay: number;
   barAnimationTime: number;
   sorting: boolean;
+  paused: boolean;
   sorted: boolean;
+  currentI: number;
+  currentJ: number;
 }
 
 export interface IBar {

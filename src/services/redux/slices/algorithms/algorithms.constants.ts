@@ -3,16 +3,17 @@ export enum AlgorithmsSlice {
 }
 
 export enum Delays {
-  LONG = 1000
+  LONG = 1
 }
 
 export enum BarAnimationTimes {
-  LONG = .9
+  LONG = 1000
 }
 
 export enum States {
   SELECTED = 'selected',
   CHANGED = 'changed',
+  PAUSED = 'paused',
   IDLE = 'idle'
 }
 
