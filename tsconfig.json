@@ -26,6 +26,12 @@
       "@/styles/*": [
         "assets/styles/*"
       ],
+      "@/services/*": [
+        "services/*"
+      ],
+      "@/data/*": [
+        "data/*"
+      ],
       "@/assets/*": [
         "assets/*"
       ],
