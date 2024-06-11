@@ -6,33 +6,34 @@ import {
     generateArrayAction, pauseSortingAction, resetAction,
     resumeSortingAction
 } from "@/services/redux/slices/algorithms/algorithms.slice.ts";
-import {pauseTimer, resetTimer, startTimer} from "@/services/redux/slices/timer/timer.slice.ts";
+import {pauseTimerAction, resetTimer, startTimerAction} from "@/services/redux/slices/timer/timer.slice.ts";
 
 const Navigation = () => {
     const isSorting = useAppSelector(state => state.algorithmsReducer.sorting);
     const isPaused = useAppSelector(state => state.algorithmsReducer.paused);
     const isSorted = useAppSelector(state => state.algorithmsReducer.sorted);
+    const isProcessing = useAppSelector(state => state.algorithmsReducer.processing); // Select processing state
 
     const dispatch = useAppDispatch();
 
     const handleShuffle = () => {
-        dispatch(resetTimer());
+        handleReset()
         dispatch(generateArrayAction());
     };
 
     const handleBubbleSort = () => {
-        dispatch(startTimer());
+        dispatch(startTimerAction());
         dispatch(bubbleSortAsync());
     };
 
     const handleToggleSorting = () => {
-        if (isPaused) {
+        if (isPaused && !isProcessing) {
             dispatch(resumeSortingAction());
-            dispatch(startTimer());
+            dispatch(startTimerAction());
             dispatch(bubbleSortAsync());
         } else if (!isPaused) {
-            dispatch(pauseTimer());
             dispatch(pauseSortingAction());
+            dispatch(pauseTimerAction());
         }
     };
 
@@ -44,11 +45,11 @@ const Navigation = () => {
     return (
         <nav className="flex gap-2 items-center justify-center">
             <Button disabled={isSorting || isPaused || isSorted} text="Bubble" onClick={handleBubbleSort}/>
-            <Button disabled={isSorting || isPaused} text="Random" onClick={handleShuffle}/>
-            <Button disabled={!isSorting && !isPaused} text={isPaused ? "Resume" : "Pause"}
+            <Button disabled={isProcessing} text="Random" onClick={handleShuffle}/>
+            <Button disabled={!isSorting && !isPaused || isProcessing && isPaused} text={isPaused ? "Resume" : "Pause"}
                     onClick={handleToggleSorting}
                     color={isPaused ? colors.resumeButtonColor : colors.pauseButtonColor}/>
-            <Button disabled={!isPaused} text="Reset" onClick={handleReset} color={colors.resetButtonColor}/>
+            <Button disabled={!isPaused || isProcessing} text="Reset" onClick={handleReset} color={colors.resetButtonColor}/>
         </nav>
     );
 };

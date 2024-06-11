@@ -7,12 +7,12 @@ const Stats = () => {
     const iterations = useAppSelector(state => state.algorithmsReducer.iterations);
 
     return (
-        <div className="text-xl flex flex-col items-center mt-3" style={{color: colors.pauseButtonColor}}>
-            <div>
-                Iterations: <span>{iterations}</span>
-            </div>
+        <div className="text-xl flex flex-col items-center mt-3 gap-1" style={{color: colors.pauseButtonColor}}>
             <div>
                 Time: <span>{formatTime(time)}</span>
+            </div>
+            <div>
+                Iterations: <span>{iterations}</span>
             </div>
         </div>
     );

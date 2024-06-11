@@ -7,14 +7,13 @@ import {
   BARS_LENGTH,
   Delays, States
 } from '@/services/redux/slices/algorithms/algorithms.constants';
-import {pauseTimerAtTheEndOfSorting} from "@/services/redux/slices/timer/timer.slice.ts";
+import {pauseTimer} from "@/services/redux/slices/timer/timer.slice.ts";
 
 export const bubbleSortAsync = createAsyncThunk<IBar[], void, { state: any, dispatch: any }>(
     'algorithms/bubbleSort',
     async (_, { dispatch, getState }) => {
       const bars = getState().algorithmsReducer.bars;
-      const delay = getState().algorithmsReducer.delay;
-      const sortedBars = await algorithmsService.bubbleSort(bars, delay, dispatch, getState);
+      const sortedBars = await algorithmsService.bubbleSort(bars, dispatch, getState);
       return sortedBars || bars;
     }
 );
@@ -27,6 +26,7 @@ const initialState: BarsInitialState = {
   barAnimationTime: BarAnimationTimes.LONG,
   iterations: 0,
   sorting: false,
+  processing: false,
   paused: false,
   sorted: false,
   currentI: 0,
@@ -75,9 +75,14 @@ const algorithmsSlice = createSlice({
       state.sorted = false;
       state.paused = false;
       state.sorting = false;
+      state.processing = false
       state.currentI = 0;
       state.currentJ = 0;
       state.iterations = 0;
+    },
+
+    setProcessing: (state, action: PayloadAction<boolean>) => {
+      state.processing = action.payload;
     },
   },
   extraReducers: (builder) => {
@@ -85,7 +90,7 @@ const algorithmsSlice = createSlice({
       if (!state.paused) {
         state.sorting = false;
         state.sorted = true;
-        pauseTimerAtTheEndOfSorting()
+        pauseTimer()
       }
     });
     builder.addCase(bubbleSortAsync.pending, (state) => {
@@ -105,5 +110,6 @@ export const {
   setCurrentPosition,
   resetAction,
   countIterations,
+  setProcessing
 } = algorithmsSlice.actions;
 export const algorithmsReducer = algorithmsSlice.reducer;

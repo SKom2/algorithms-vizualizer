@@ -25,7 +25,7 @@ const timerSlice = createSlice({
 
 let timerRef: any = null;
 
-export const startTimer = () => (dispatch: AppDispatch) => {
+export const startTimerAction = () => (dispatch: AppDispatch) => {
     if (!timerRef) {
         timerRef = setInterval(() => {
             dispatch(tick());
@@ -33,14 +33,9 @@ export const startTimer = () => (dispatch: AppDispatch) => {
     }
 };
 
-export const pauseTimer = () => () => {
-    if (timerRef) {
-        clearInterval(timerRef);
-        timerRef = null;
-    }
-};
+export const pauseTimerAction = () => pauseTimer
 
-export const pauseTimerAtTheEndOfSorting = () => {
+export const pauseTimer = () => {
     if (timerRef) {
         clearInterval(timerRef);
         timerRef = null;

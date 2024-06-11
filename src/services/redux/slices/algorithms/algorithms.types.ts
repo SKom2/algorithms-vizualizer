@@ -6,6 +6,7 @@ export interface BarsInitialState {
   barAnimationTime: number;
   iterations: number;
   sorting: boolean;
+  processing: boolean;
   paused: boolean;
   sorted: boolean;
   currentI: number;
