@@ -2,7 +2,7 @@ import { createAsyncThunk, createSlice, PayloadAction } from '@reduxjs/toolkit';
 import { BarsInitialState, ChangeBarPayload, IBar } from '@/services/redux/slices/algorithms/algorithms.types';
 import { algorithmsService } from '@/services/redux/slices/algorithms/algorithms.service';
 import {
-  AlgorithmsSlice,
+  Algorithms,
   BarAnimationTimes,
   BARS_LENGTH,
   Delays, States
@@ -30,7 +30,7 @@ export const selectionSortAsync = createAsyncThunk<IBar[], void, { state: any, d
 const initialState: BarsInitialState = {
   bars: [],
   barsLength: BARS_LENGTH,
-  algorithm: AlgorithmsSlice.BUBBLE_SORT,
+  algorithm: Algorithms.BUBBLE_SORT,
   delay: Delays.LONG,
   barAnimationTime: BarAnimationTimes.LONG,
   iterations: 0,
@@ -60,12 +60,6 @@ const algorithmsSlice = createSlice({
 
     pauseSortingAction: (state) => {
       state.paused = true;
-      state.sorting = false;
-    },
-
-    resumeSortingAction: (state) => {
-      state.paused = false;
-      state.sorting = true;
     },
 
     setCurrentPosition: (state, action: PayloadAction<{ i: number, j: number }>) => {
@@ -85,34 +79,39 @@ const algorithmsSlice = createSlice({
       state.sorted = false;
       state.paused = false;
       state.sorting = false;
-      state.processing = false
+      state.processing = false;
       state.currentI = 0;
       state.currentJ = 0;
       state.iterations = 0;
       state.minimumIndex = 0;
     },
 
-    setProcessing: (state, action: PayloadAction<boolean>) => {
-      state.processing = action.payload;
-    },
-
     setMinimumIndex: (state, action: PayloadAction<number>) => {
       state.minimumIndex = action.payload;
+    },
+
+    setChosenAlgorithm: (state, action: PayloadAction<string>) => {
+      state.algorithm = action.payload;
     },
   },
   extraReducers: (builder) => {
     builder.addCase(bubbleSortAsync.fulfilled, (state) => {
+      state.processing = false;
       if (!state.paused) {
         state.sorting = false;
         state.sorted = true;
+        state.currentI = 0;
+        state.currentJ = 0;
         pauseTimer()
       }
     });
     builder.addCase(bubbleSortAsync.pending, (state) => {
+      state.processing = true;
       state.sorting = true;
+      state.paused = false;
     });
-    builder.addCase(bubbleSortAsync.rejected, (state) => {
-      state.sorting = false;
+    builder.addCase(bubbleSortAsync.rejected, () => {
+      resetAction()
     });
   }
 })
@@ -121,11 +120,10 @@ export const {
   generateArrayAction,
   changeBar,
   pauseSortingAction,
-  resumeSortingAction,
   setCurrentPosition,
   resetAction,
   countIterations,
-  setProcessing,
-  setMinimumIndex
+  setMinimumIndex,
+  setChosenAlgorithm
 } = algorithmsSlice.actions;
 export const algorithmsReducer = algorithmsSlice.reducer;

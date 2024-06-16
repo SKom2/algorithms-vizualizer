@@ -5,7 +5,6 @@ import {
   changeBar,
   countIterations,
   setCurrentPosition, setMinimumIndex,
-  setProcessing
 } from '@/services/redux/slices/algorithms/algorithms.slice';
 
 export const algorithmsService = {
@@ -20,8 +19,9 @@ export const algorithmsService = {
 
   bubbleSort: async (bars: IBar[], dispatch: any, getState: any) => {
     let sortedBars = [...bars]
+    const { currentI, delay } = getState().algorithmsReducer;
 
-    for (let i = getState().algorithmsReducer.currentI; i < sortedBars.length; i++) {
+    for (let i = currentI; i < sortedBars.length; i++) {
       dispatch(setCurrentPosition({ i: i, j: 0 }));
 
       for (let j = getState().algorithmsReducer.currentJ; j < sortedBars.length - i - 1; j++) {
@@ -34,12 +34,10 @@ export const algorithmsService = {
           return;
         }
 
-        dispatch(setProcessing(true));
-
         dispatch(changeBar({ index: j, payload: { state: States.SELECTED } }));
         dispatch(changeBar({ index: j + 1, payload: { state: States.SELECTED } }));
 
-        await awaitTimeout(getState().algorithmsReducer.delay);
+        await awaitTimeout(delay);
 
         if (sortedBars[j].value > sortedBars[j + 1].value) {
           sortedBars = swap(sortedBars, j, j + 1);
@@ -48,21 +46,18 @@ export const algorithmsService = {
           dispatch(changeBar({ index: j + 1, payload: { value: sortedBars[j + 1].value, state: States.CHANGING } }));
           dispatch(countIterations())
 
-          await awaitTimeout(getState().algorithmsReducer.delay);
+          await awaitTimeout(delay);
         }
 
+        // In case when this is the last bar, we make its State "CHANGED"
         if (i === sortedBars.length - 2) {
           dispatch(changeBar({index: j, payload: {state: States.CHANGED}}));
         } else {
           dispatch(changeBar({index: j, payload: {state: States.IDLE}}));
         }
         dispatch(changeBar({ index: j + 1, payload: { state: States.CHANGED } }));
-        dispatch(setProcessing(false));
       }
     }
-
-    dispatch(setCurrentPosition({ i: 0, j: 0 }));
-    dispatch(setProcessing(false));
 
     return sortedBars
   },
@@ -72,8 +67,11 @@ export const algorithmsService = {
     const { currentI, delay } = getState().algorithmsReducer;
 
     for (let i = currentI; i < sortedBars.length - 1; i++) {
+      // Set the current position for i and j
       dispatch(setCurrentPosition({ i, j: i + 1 }));
       const { currentJ, minimumIndex: minimumIndexAtStart  } = getState().algorithmsReducer;
+
+      // Set the start point for j based on its current state
       const startPoint = minimumIndexAtStart === i ? currentJ : minimumIndexAtStart + 1;
 
       for (let j = startPoint; j < sortedBars.length; j++) {
@@ -82,14 +80,12 @@ export const algorithmsService = {
         const { paused, minimumIndex } = getState().algorithmsReducer;
 
         if (paused) {
-          dispatch(setProcessing(false));
-          dispatch(changeBar({ index: minimumIndex === i ? i : minimumIndex, payload: { state: States.PAUSED } }));
+          dispatch(changeBar({ index: minimumIndex, payload: { state: States.PAUSED } }));
           dispatch(changeBar({ index: i, payload: { state: States.PAUSED } }));
 
           return;
         }
 
-        dispatch(setProcessing(true));
         dispatch(changeBar({ index: i, payload: { state: States.CHANGING } }));
         dispatch(changeBar({ index: minimumIndex, payload: { state: States.CHANGING } }));
         dispatch(changeBar({ index: j, payload: { state: States.SELECTED } }));
@@ -110,7 +106,10 @@ export const algorithmsService = {
 
         sortedBars = swap(sortedBars, minimumIndex, i);
 
-        dispatch(changeBar({ index: minimumIndex, payload: { value: sortedBars[minimumIndex].value, state: minimumIndex === sortedBars.length - 1 ? States.CHANGED : States.IDLE } }));
+        // In case when the last two bars change, we need to make addition condition for the last bar to change its state to "CHANGED"
+        const lastBarState = minimumIndex === sortedBars.length - 1 ? States.CHANGED : States.IDLE;
+
+        dispatch(changeBar({ index: minimumIndex, payload: { value: sortedBars[minimumIndex].value, state: lastBarState } }));
         dispatch(changeBar({ index: i, payload: { value: sortedBars[i].value, state: States.CHANGED } }));
       } else {
         dispatch(changeBar({ index: i, payload: { state: States.CHANGED } }));
@@ -118,14 +117,10 @@ export const algorithmsService = {
       }
 
 
-      dispatch(setMinimumIndex(i + 1))
-      dispatch(countIterations());
       await awaitTimeout(delay);
+      dispatch(countIterations());
+      dispatch(setMinimumIndex(i + 1))
     }
-
-    dispatch(setCurrentPosition({ i: 0, j: 0 }));
-    dispatch(setMinimumIndex(0))
-    dispatch(setProcessing(false));
 
     return sortedBars;
   }

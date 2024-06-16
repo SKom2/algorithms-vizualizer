@@ -1,9 +1,10 @@
-export enum AlgorithmsSlice {
+export enum Algorithms {
   BUBBLE_SORT = 'bubble sort',
+  SELECTION_SORT = 'selection sort',
 }
 
 export enum Delays {
-  LONG = 100
+  LONG = 1
 }
 
 export enum BarAnimationTimes {
@@ -18,4 +19,4 @@ export enum States {
   IDLE = 'idle'
 }
 
-export const BARS_LENGTH = 30;
+export const BARS_LENGTH = 10;
