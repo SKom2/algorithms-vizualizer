@@ -89,6 +89,7 @@ const algorithmsSlice = createSlice({
       state.currentI = 0;
       state.currentJ = 0;
       state.iterations = 0;
+      state.minimumIndex = 0;
     },
 
     setProcessing: (state, action: PayloadAction<boolean>) => {

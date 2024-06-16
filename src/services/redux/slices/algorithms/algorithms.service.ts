@@ -72,10 +72,9 @@ export const algorithmsService = {
     const { currentI, delay } = getState().algorithmsReducer;
 
     for (let i = currentI; i < sortedBars.length - 1; i++) {
-      dispatch(setMinimumIndex(i))
       dispatch(setCurrentPosition({ i, j: i + 1 }));
       const { currentJ, minimumIndex: minimumIndexAtStart  } = getState().algorithmsReducer;
-      const startPoint = minimumIndexAtStart === i ? currentJ : minimumIndexAtStart;
+      const startPoint = minimumIndexAtStart === i ? currentJ : minimumIndexAtStart + 1;
 
       for (let j = startPoint; j < sortedBars.length; j++) {
         dispatch(setCurrentPosition({ i, j }));
@@ -84,7 +83,7 @@ export const algorithmsService = {
 
         if (paused) {
           dispatch(setProcessing(false));
-          dispatch(changeBar({ index: minimumIndex, payload: { state: States.IDLE } }));
+          dispatch(changeBar({ index: minimumIndex === i ? i : minimumIndex, payload: { state: States.PAUSED } }));
           dispatch(changeBar({ index: i, payload: { state: States.PAUSED } }));
 
           return;
@@ -118,11 +117,14 @@ export const algorithmsService = {
         dispatch(changeBar({ index: i + 1, payload: { state: States.CHANGED } }));
       }
 
+
+      dispatch(setMinimumIndex(i + 1))
       dispatch(countIterations());
       await awaitTimeout(delay);
     }
 
     dispatch(setCurrentPosition({ i: 0, j: 0 }));
+    dispatch(setMinimumIndex(0))
     dispatch(setProcessing(false));
 
     return sortedBars;
