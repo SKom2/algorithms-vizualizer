@@ -35,7 +35,7 @@ const Navigation = () => {
         if (isPaused && !isProcessing) {
             dispatch(resumeSortingAction());
             dispatch(startTimerAction());
-            dispatch(bubbleSortAsync());
+            dispatch(selectionSortAsync());
         } else if (!isPaused) {
             dispatch(pauseSortingAction());
             dispatch(pauseTimerAction());

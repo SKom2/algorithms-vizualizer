@@ -3,7 +3,7 @@ export enum AlgorithmsSlice {
 }
 
 export enum Delays {
-  LONG = 1
+  LONG = 100
 }
 
 export enum BarAnimationTimes {
