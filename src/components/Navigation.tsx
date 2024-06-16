@@ -4,7 +4,7 @@ import {useAppDispatch, useAppSelector} from "@/services/redux/typeHooks.ts";
 import {
     bubbleSortAsync,
     generateArrayAction, pauseSortingAction, resetAction,
-    resumeSortingAction
+    resumeSortingAction, selectionSortAsync
 } from "@/services/redux/slices/algorithms/algorithms.slice.ts";
 import {pauseTimerAction, resetTimer, startTimerAction} from "@/services/redux/slices/timer/timer.slice.ts";
 
@@ -26,6 +26,11 @@ const Navigation = () => {
         dispatch(bubbleSortAsync());
     };
 
+    const handleSelectionSort = () => {
+        dispatch(startTimerAction());
+        dispatch(selectionSortAsync());
+    };
+
     const handleToggleSorting = () => {
         if (isPaused && !isProcessing) {
             dispatch(resumeSortingAction());
@@ -45,6 +50,7 @@ const Navigation = () => {
     return (
         <nav className="flex gap-2 items-center justify-center">
             <Button disabled={isSorting || isPaused || isSorted} text="Bubble" onClick={handleBubbleSort}/>
+            <Button disabled={isSorting || isPaused || isSorted} text="Selection" onClick={handleSelectionSort}/>
             <Button disabled={isProcessing} text="Random" onClick={handleShuffle}/>
             <Button disabled={!isSorting && !isPaused || isProcessing && isPaused} text={isPaused ? "Resume" : "Pause"}
                     onClick={handleToggleSorting}

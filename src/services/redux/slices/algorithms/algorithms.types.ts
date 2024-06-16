@@ -11,6 +11,7 @@ export interface BarsInitialState {
   sorted: boolean;
   currentI: number;
   currentJ: number;
+  minimumIndex: number;
 }
 
 export interface IBar {

@@ -12,6 +12,7 @@ export enum BarAnimationTimes {
 
 export enum States {
   SELECTED = 'selected',
+  CHANGING = 'changing',
   CHANGED = 'changed',
   PAUSED = 'paused',
   IDLE = 'idle'

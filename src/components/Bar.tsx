@@ -15,6 +15,9 @@ const Bar: FC<{ bar: IBar }> = ({ bar }) => {
         case States.SELECTED:
             barColor = colors.selectedBarColor;
             break;
+        case States.CHANGING:
+            barColor = colors.changingBarColor;
+            break;
         case States.CHANGED:
             barColor = colors.changedBarColor;
             break;

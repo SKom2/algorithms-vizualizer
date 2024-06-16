@@ -18,6 +18,15 @@ export const bubbleSortAsync = createAsyncThunk<IBar[], void, { state: any, disp
     }
 );
 
+export const selectionSortAsync = createAsyncThunk<IBar[], void, { state: any, dispatch: any }>(
+    'algorithms/bubbleSort',
+    async (_, { dispatch, getState }) => {
+      const bars = getState().algorithmsReducer.bars;
+      const sortedBars = await algorithmsService.selectionSort(bars, dispatch, getState);
+      return sortedBars || bars;
+    }
+);
+
 const initialState: BarsInitialState = {
   bars: [],
   barsLength: BARS_LENGTH,
@@ -31,6 +40,7 @@ const initialState: BarsInitialState = {
   sorted: false,
   currentI: 0,
   currentJ: 0,
+  minimumIndex: 0,
 }
 
 const algorithmsSlice = createSlice({
@@ -84,6 +94,10 @@ const algorithmsSlice = createSlice({
     setProcessing: (state, action: PayloadAction<boolean>) => {
       state.processing = action.payload;
     },
+
+    setMinimumIndex: (state, action: PayloadAction<number>) => {
+      state.minimumIndex = action.payload;
+    },
   },
   extraReducers: (builder) => {
     builder.addCase(bubbleSortAsync.fulfilled, (state) => {
@@ -110,6 +124,7 @@ export const {
   setCurrentPosition,
   resetAction,
   countIterations,
-  setProcessing
+  setProcessing,
+  setMinimumIndex
 } = algorithmsSlice.actions;
 export const algorithmsReducer = algorithmsSlice.reducer;

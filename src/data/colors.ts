@@ -11,6 +11,7 @@ const colors = {
     disabledText: '#FFFFFF',
 
     barInitialColor: '#009688',
+    changingBarColor: '#FF6347',
     selectedBarColor: '#8E44AD',
     changedBarColor: '#2E8B57',
     pausedBarColor: '#FFA500',
