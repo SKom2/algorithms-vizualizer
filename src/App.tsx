@@ -18,7 +18,7 @@ const App = () => {
 const WrappedApp = () => {
     return (
         <Provider store={store}>
-            <BrowserRouter basename="/algorithms-visualizer">
+            <BrowserRouter>
                 <App />
             </BrowserRouter>
         </Provider>
