@@ -1,6 +1,6 @@
 import {useEffect, useRef} from "react";
 import {useAppDispatch, useAppSelector} from "@/services/redux/typeHooks.ts";
-import {tick} from "@/services/redux/slices/algorithms/algorithms.slice.ts";
+import {tick} from "@/services/redux/slices/timer/timer.slice.ts";
 
 const useTimer = () => {
     const dispatch = useAppDispatch();
