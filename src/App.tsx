@@ -1,14 +1,28 @@
-import Algorithms from "@/components/Algorithms.tsx";
+import SortingVisualization from "@/components/SortingVisualization.tsx";
 import {Provider} from "react-redux";
 import {store} from "@/services/redux/store.ts";
+import {BrowserRouter, Route, Routes} from "react-router-dom";
+import Header from "@/components/Header.tsx";
 
-function App() {
-
+const App = () => {
   return (
-      <Provider store={store}>
-        <Algorithms />
-      </Provider>
+      <>
+          <Header />
+          <Routes>
+              <Route path="/"  element={<SortingVisualization />} />
+          </Routes>
+      </>
   )
 }
 
-export default App
+const WrappedApp = () => {
+    return (
+        <Provider store={store}>
+            <BrowserRouter basename="/algorithms-visualizer">
+                <App />
+            </BrowserRouter>
+        </Provider>
+    )
+}
+
+export default WrappedApp

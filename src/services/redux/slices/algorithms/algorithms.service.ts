@@ -1,4 +1,4 @@
-import { BARS_LENGTH, States } from '@/services/redux/slices/algorithms/algorithms.constants';
+import { States } from '@/services/redux/slices/algorithms/algorithms.constants';
 import { awaitTimeout, getRandomNumber, swap } from '@/services/redux/slices/algorithms/algorithms.helpers';
 import { IBar } from '@/services/redux/slices/algorithms/algorithms.types';
 import {
@@ -8,10 +8,10 @@ import {
 } from '@/services/redux/slices/algorithms/algorithms.slice';
 
 export const algorithmsService = {
-  generateArray: () => {
-    return Array.from({ length: BARS_LENGTH }, () => {
+  generateArray: async (barsLength: number) => {
+    return Array.from({ length: barsLength }, () => {
       return {
-        value: getRandomNumber(1, 70),
+        value: getRandomNumber(1, 100),
         state: States.IDLE,
       };
     })
@@ -22,9 +22,9 @@ export const algorithmsService = {
     const { currentI, delay } = getState().algorithmsReducer;
 
     for (let i = currentI; i < sortedBars.length; i++) {
-      dispatch(setCurrentPosition({ i: i, j: 0 }));
+      const { currentJ } = getState().algorithmsReducer;
 
-      for (let j = getState().algorithmsReducer.currentJ; j < sortedBars.length - i - 1; j++) {
+      for (let j = currentJ; j < sortedBars.length - i - 1; j++) {
         dispatch(setCurrentPosition({ i, j }));
 
         if (getState().algorithmsReducer.paused) {
@@ -57,6 +57,8 @@ export const algorithmsService = {
         }
         dispatch(changeBar({ index: j + 1, payload: { state: States.CHANGED } }));
       }
+
+      dispatch(setCurrentPosition({ i: i, j: 0 }));
     }
 
     return sortedBars

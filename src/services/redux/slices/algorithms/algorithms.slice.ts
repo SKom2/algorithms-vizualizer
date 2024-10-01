@@ -1,11 +1,12 @@
-import { createAsyncThunk, createSlice, PayloadAction } from '@reduxjs/toolkit';
-import { BarsInitialState, ChangeBarPayload, IBar } from '@/services/redux/slices/algorithms/algorithms.types';
-import { algorithmsService } from '@/services/redux/slices/algorithms/algorithms.service';
+import {createAsyncThunk, createSlice, PayloadAction} from '@reduxjs/toolkit';
+import {BarsInitialState, ChangeBarPayload, IBar} from '@/services/redux/slices/algorithms/algorithms.types';
+import {algorithmsService} from '@/services/redux/slices/algorithms/algorithms.service';
 import {
   Algorithms,
   BarAnimationTimes,
   BARS_LENGTH,
-  Delays, States
+  Delays,
+  States
 } from '@/services/redux/slices/algorithms/algorithms.constants';
 import {pauseTimer} from "@/services/redux/slices/timer/timer.slice.ts";
 
@@ -27,11 +28,19 @@ export const selectionSortAsync = createAsyncThunk<IBar[], void, { state: any, d
     }
 );
 
+export const generateArrayAction = createAsyncThunk<IBar[], void, { state: any }>(
+    'algorithms/generateArray',
+    async (_, { getState }) => {
+      const barsLength = getState().algorithmsReducer.barsLength;
+      return await algorithmsService.generateArray(barsLength);
+    }
+);
+
 const initialState: BarsInitialState = {
   bars: [],
   barsLength: BARS_LENGTH,
   algorithm: Algorithms.BUBBLE_SORT,
-  delay: Delays.LONG,
+  delay: Delays.MEDIUM,
   barAnimationTime: BarAnimationTimes.LONG,
   iterations: 0,
   sorting: false,
@@ -51,11 +60,6 @@ const algorithmsSlice = createSlice({
       state.bars = state.bars.map((item, i) => {
         return i === action.payload.index ? { ...item, ...action.payload.payload } : item
       })
-    },
-
-    generateArrayAction: (state) => {
-      state.bars = algorithmsService.generateArray();
-      state.sorted = false;
     },
 
     pauseSortingAction: (state) => {
@@ -93,6 +97,26 @@ const algorithmsSlice = createSlice({
     setChosenAlgorithm: (state, action: PayloadAction<string>) => {
       state.algorithm = action.payload;
     },
+
+    changeBarsNumber: (state, action: PayloadAction<number>) => {
+      state.bars = state.bars.map((bar) => ({
+        ...bar,
+        state: States.IDLE
+      }));
+      state.sorted = false;
+      state.paused = false;
+      state.sorting = false;
+      state.processing = false;
+      state.currentI = 0;
+      state.currentJ = 0;
+      state.iterations = 0;
+      state.minimumIndex = 0;
+      state.barsLength = action.payload;
+    },
+
+    changeAnimationTime: (state, action) => {
+      state.delay = action.payload;
+    }
   },
   extraReducers: (builder) => {
     builder.addCase(bubbleSortAsync.fulfilled, (state) => {
@@ -113,17 +137,23 @@ const algorithmsSlice = createSlice({
     builder.addCase(bubbleSortAsync.rejected, () => {
       resetAction()
     });
+
+    builder.addCase(generateArrayAction.fulfilled, (state, action) => {
+      state.bars = action.payload;
+      state.sorted = false;
+    });
   }
 })
 
 export const {
-  generateArrayAction,
   changeBar,
   pauseSortingAction,
   setCurrentPosition,
   resetAction,
   countIterations,
   setMinimumIndex,
-  setChosenAlgorithm
+  setChosenAlgorithm,
+  changeBarsNumber,
+  changeAnimationTime
 } = algorithmsSlice.actions;
 export const algorithmsReducer = algorithmsSlice.reducer;

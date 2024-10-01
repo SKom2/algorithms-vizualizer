@@ -1,0 +1,20 @@
+@layer components {
+    .title {
+        @apply font-sans-source text-primaryTextColor text-[36px] font-bold leading-10
+    }
+    .sub-title {
+        @apply font-sans-source text-primaryTextColor text-[20px] font-normal leading-[28px]
+    }
+    .secondary-title {
+        @apply font-sans-source text-primaryTextColor text-[24px] font-normal leading-[32px]
+    }
+    .secondary-sub-title {
+        @apply font-sans-source text-primaryTextColor text-[16px] font-normal leading-[24px]
+    }
+    .main-text {
+        @apply font-sans-source text-primaryTextColor text-[18px] font-normal leading-[28px]
+    }
+    .sm-text {
+        @apply font-sans-source text-primaryTextColor text-[14px] font-normal leading-[20px]
+    }
+}

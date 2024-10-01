@@ -1,22 +1,22 @@
 const colors = {
-    bgColor: '#242424',
+    bgColor: '#161616',
+    primaryScreenColor: '#333333',
+    secondaryScreenColor: '#444444',
 
-    buttonColor: '#8E44AD',
-    chosenButtonColor: '#782D91',
-    unselectedButtonColor: '#782D91',
+    primaryPurple: '#8929DB',
+    secondaryPurple: '#782D91',
 
     pauseButtonColor: '#FFA500',
-    resumeButtonColor: '#2E8B57',
+    resumeButtonColor: '#009688',
     resetButtonColor: '#FF6347',
     disabledButton: '#A9A9A9',
 
-    textColor: '#FFFFFF',
-    disabledText: '#FFFFFF',
-    unselectedTextColor: '#FFFFFF',
+    primaryTextColor: '#FFFFFF',
+    secondaryTextColor: '#B9B9B9',
 
     barInitialColor: '#009688',
     changingBarColor: '#FF6347',
-    selectedBarColor: '#8E44AD',
+    selectedBarColor: '#8929DB',
     changedBarColor: '#2E8B57',
     pausedBarColor: '#FFA500',
 };

@@ -3,7 +3,7 @@ import { setChosenAlgorithm } from "@/services/redux/slices/algorithms/algorithm
 import { Algorithms } from "@/services/redux/slices/algorithms/algorithms.constants.ts";
 import SortButton from "@/ui/SortButton.tsx";
 
-const SortingButtons = () => {
+const SortsButtonsContainer = () => {
     const dispatch = useAppDispatch();
 
     const { sorting: isSorting, sorted: isSorted, algorithm: chosenAlgorithm } = useAppSelector((state) => state.algorithmsReducer);
@@ -15,7 +15,8 @@ const SortingButtons = () => {
     const isButtonDisabled = isSorting || isSorted;
 
     return (
-        <>
+        <div className="flex max-w-[170px] flex-col gap-2 items-start">
+            <span>ALGORITHMS LIST</span>
             <SortButton
                 disabled={isButtonDisabled}
                 selected={chosenAlgorithm === Algorithms.BUBBLE_SORT}
@@ -28,8 +29,8 @@ const SortingButtons = () => {
                 text="Selection"
                 onClick={() => chooseAlgorithm(Algorithms.SELECTION_SORT)}
             />
-        </>
+        </div>
     );
 };
 
-export default SortingButtons;
+export default SortsButtonsContainer;

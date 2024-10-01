@@ -12,7 +12,7 @@ import {Algorithms} from "@/services/redux/slices/algorithms/algorithms.constant
 const ControlButtons = () => {
     const isSorting = useAppSelector(state => state.algorithmsReducer.sorting);
     const isPaused = useAppSelector(state => state.algorithmsReducer.paused);
-    const isProcessing = useAppSelector(state => state.algorithmsReducer.processing); // Select processing state
+    const isProcessing = useAppSelector(state => state.algorithmsReducer.processing);
     const chosenAlgorithm = useAppSelector(state => state.algorithmsReducer.algorithm);
     const isSorted = useAppSelector(state => state.algorithmsReducer.sorted);
 
@@ -66,7 +66,7 @@ const ControlButtons = () => {
     };
 
     return (
-        <>
+        <div className="flex gap-2 justify-center">
             <Button disabled={isProcessing} text="Random" onClick={handleShuffle}/>
             <Button
                 disabled={isProcessing && isPaused || isSorted}
@@ -75,7 +75,7 @@ const ControlButtons = () => {
                 color={getButtonColor()}
             />
             <Button disabled={!isPaused || isProcessing} text="Reset" onClick={handleReset} color={colors.resetButtonColor}/>
-        </>
+        </div>
     );
 };
 

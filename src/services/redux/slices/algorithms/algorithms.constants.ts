@@ -4,7 +4,9 @@ export enum Algorithms {
 }
 
 export enum Delays {
-  LONG = 1
+  SLOW = 500,
+  MEDIUM = 100,
+  FAST = 10,
 }
 
 export enum BarAnimationTimes {
@@ -19,4 +21,4 @@ export enum States {
   IDLE = 'idle'
 }
 
-export const BARS_LENGTH = 10;
+export const BARS_LENGTH = 50;

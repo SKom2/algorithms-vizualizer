@@ -1,13 +1,12 @@
+@import "assets/styles/components/slider.css";
+@import "assets/styles/text.css";
+
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
 
-html, body {
-    min-height: 100%;
-}
 
 body {
-    height: 100vh;
     margin: 0;
     min-width: 320px;
 }

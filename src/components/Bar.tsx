@@ -7,13 +7,14 @@ import useAnimatedNumber from "@/hooks/useAnimatedNumber.ts";
 
 const Bar: FC<{ bar: IBar }> = ({ bar }) => {
     const barAnimationTime = useAppSelector(state => state.algorithmsReducer.barAnimationTime);
+    const barsAmount = useAppSelector(state => state.algorithmsReducer.barsLength);
     const animatedValue = useAnimatedNumber(bar.value, barAnimationTime);
 
     let barColor;
 
     switch (bar.state) {
         case States.SELECTED:
-            barColor = colors.selectedBarColor;
+            barColor = colors.primaryPurple;
             break;
         case States.CHANGING:
             barColor = colors.changingBarColor;
@@ -32,7 +33,9 @@ const Bar: FC<{ bar: IBar }> = ({ bar }) => {
 
     return (
         <div className="h-full flex flex-col justify-end">
-            <span className="text-white self-center text-[10px]">{Math.round(animatedValue)}</span>
+            {
+                barsAmount <= 60 && <span className="text-white self-center text-[10px]">{Math.round(animatedValue)}</span>
+            }
             <div className="text-center text-white h-full rounded-t-xl"
                  style={{height: `${bar.value}%`, transition: `height ${barAnimationTime / 1000}s ease`, backgroundColor: barColor}}>
                 <div />
