@@ -1,0 +1,49 @@
+@layer components {
+    .slider-container {
+        margin-top: 5px;
+        position: relative;
+        height: 5px;
+    }
+
+    .custom-range {
+        height: 100%;
+        width: 100%;
+        appearance: none;
+        background: theme('colors.primaryScreenColor');
+        border-radius: 15px;
+        position: absolute;
+        cursor: pointer;
+    }
+
+    .custom-range::-webkit-slider-thumb {
+        appearance: none;
+        height: 15px;
+        width: 15px;
+        background: theme('colors.secondaryTextColor');
+        border-radius: 50%;
+        cursor: pointer;
+        position: relative;
+        z-index: 3;
+    }
+
+    .slider-value {
+        position: absolute;
+        cursor: pointer;
+        top: 12px;
+        user-select: none;
+        @apply sm-text;
+        color: theme('colors.secondaryTextColor') ;
+        z-index: 2;
+        pointer-events: none;
+    }
+
+    .progress-bar{
+        position: absolute;
+        top: 0;
+        left: 0;
+        height: 5px;
+        border-radius: 15px;
+        background: theme('colors.secondaryTextColor');
+        z-index: 1;
+    }
+}
